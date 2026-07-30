@@ -182,11 +182,9 @@ body{
 .day.open .day-body{display:block}
 .day-inner{padding:0 14px 14px;border-top:1px dashed rgba(18,58,69,.12)}
 .block{margin-top:12px}
-.block h4{font-size:13px;color:var(--deep);margin-bottom:4px;display:flex;align-items:center;gap:6px;font-weight:700}
-.block h4::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--coral);transform:rotate(45deg)}
+.block h4{font-size:13px;color:var(--deep);font-weight:700;display:flex;align-items:center;gap:6px}
+.block h4::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--coral);transform:rotate(45deg);flex:none}
 .block ul{list-style:none}
-.block li{font-size:13px;padding-left:14px;position:relative;margin-bottom:2px}
-.block li::before{content:"·";position:absolute;left:2px;color:var(--sea);font-weight:900}
 
 .grid2{display:grid;grid-template-columns:1fr;gap:10px}
 @media(min-width:560px){.grid2{grid-template-columns:1fr 1fr}}
@@ -215,8 +213,8 @@ body{
 .cl-group{background:var(--paper);border-radius:14px;padding:6px 14px 8px;margin-bottom:10px;
   border:1px solid rgba(18,58,69,.07)}
 .cl-group h4{font-size:14px;color:var(--deep);padding:10px 0 6px;border-bottom:1px dashed rgba(18,58,69,.12);margin-bottom:4px}
-.cl-item{display:flex;align-items:flex-start;gap:10px;padding:8px 2px;cursor:pointer;user-select:none}
-.cl-item input{display:none}
+.cl-item{display:flex;align-items:flex-start;gap:8px;padding:8px 2px;user-select:none}
+.cl-item input[type=checkbox]{display:none}
 .cl-box{
   flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--sea);
   margin-top:2px;display:flex;align-items:center;justify-content:center;background:#fff;transition:all .2s
@@ -224,8 +222,37 @@ body{
 .cl-box svg{width:12px;height:12px;stroke:#fff;stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all .2s}
 .cl-item.done .cl-box{background:var(--sea);border-color:var(--sea)}
 .cl-item.done .cl-box svg{opacity:1;transform:scale(1)}
-.cl-text{font-size:14px}
+.cl-text{flex:1;font-size:14px;min-width:0;word-break:break-word}
 .cl-item.done .cl-text{color:#9db4b8;text-decoration:line-through}
+.icon-btn{
+  flex:none;background:none;border:none;color:#c4a99a;font-size:15px;
+  cursor:pointer;padding:0 4px;line-height:1.2;font-family:inherit
+}
+.icon-btn.edit{color:var(--sea)}
+.add-row{display:flex;gap:8px;margin-top:8px;padding-top:6px;border-top:1px dashed rgba(18,58,69,.1)}
+.add-row input{
+  flex:1;border:1px solid rgba(18,58,69,.15);border-radius:10px;
+  padding:8px 10px;font-size:13px;font-family:inherit;background:#fff;outline:none
+}
+.add-row input:focus{border-color:var(--sea)}
+.add-row button{
+  flex:none;background:var(--deep);color:#fff;border:none;border-radius:10px;
+  padding:0 12px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:600
+}
+.block-hd{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.block-hd h4{flex:1;margin-bottom:0}
+.plan-item{
+  display:flex;align-items:flex-start;gap:6px;padding:4px 0;font-size:13px
+}
+.plan-item .txt{flex:1;min-width:0;word-break:break-word;padding-left:12px;position:relative}
+.plan-item .txt::before{content:"·";position:absolute;left:2px;color:var(--sea);font-weight:900}
+.edit-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.edit-actions button{
+  border:1px solid rgba(18,58,69,.15);background:#fff;color:var(--deep);
+  border-radius:999px;padding:5px 12px;font-size:12px;font-family:inherit;cursor:pointer
+}
+.edit-actions button.danger{color:var(--coral);border-color:rgba(232,102,60,.3)}
+.group-add{margin:10px 0 4px}
 
 .step{display:flex;gap:12px}
 .step .rail{flex:none;display:flex;flex-direction:column;align-items:center}
@@ -306,7 +333,7 @@ body{
   <div class="sec-title"><h2 class="serif">行程总览</h2></div>
   <div class="ov-card" id="ovCard"></div>
   <div class="sec-title" style="margin-top:20px"><h2 class="serif">每日详细</h2></div>
-  <p class="sec-desc">点击展开当天安排</p>
+  <p class="sec-desc">点击展开；可修改、添加、删除条目，自动保存</p>
   <div id="dayList"></div>
 </div>
 
@@ -472,15 +499,19 @@ body{
 <!-- ===== 清单 ===== -->
 <div class="panel" id="panel-pack">
   <div class="sec-title"><h2 class="serif">行前必备清单</h2></div>
-  <p class="sec-desc">勾选自动保存在本机</p>
+  <p class="sec-desc">可勾选、添加、删除，自动保存在本机</p>
   <div class="progress-card">
     <div class="progress-top">
       <span>打包进度 <b id="pText">0 / 0</b></span>
-      <button class="reset" id="resetBtn" type="button">清空</button>
+      <button class="reset" id="resetBtn" type="button">恢复默认</button>
     </div>
     <div class="bar"><i id="pBar"></i></div>
   </div>
   <div id="packList"></div>
+  <div class="add-row group-add">
+    <input id="packGroupInput" type="text" placeholder="新增分组，如：伴手礼" maxlength="20">
+    <button type="button" id="packGroupAdd">加分组</button>
+  </div>
   <div class="tip">🧺 不用带：赶海工具、洗漱用品（民宿都有）</div>
 </div>
 
@@ -494,7 +525,7 @@ body{
 </nav>
 
 <script>
-const TRIP_START = new Date(2026,7,15); // 8月15日
+const TRIP_START = new Date(2026,7,15);
 const TRIP_END = new Date(2026,7,22);
 const DATES = ["2026-08-15","2026-08-16","2026-08-17","2026-08-18","2026-08-19","2026-08-20","2026-08-21","2026-08-22"];
 
@@ -509,28 +540,28 @@ const OVERVIEW = [
   {d:8,date:"8/22",plan:"北海 → 成都",hl:"上午自由活动，下午返程",bed:"—",island:false}
 ];
 
-const DAYS = [
+const DAYS_DEFAULT = [
 {badge:"D1",title:"8/15 成都 → 北海",sub:"抵达 · 侨港夜市",blocks:[
-  {h:"交通（二选一）",items:["<b>飞机（推荐）</b>：成都天府/双流 → 北海福成，直飞约2小时","<b>高铁</b>：成都东→南宁东→北海，约8小时，约510元/人"]},
+  {h:"交通（二选一）",items:["飞机（推荐）：成都天府/双流 → 北海福成，直飞约2小时","高铁：成都东→南宁东→北海，约8小时，约510元/人"]},
   {h:"抵达后",items:["机场/高铁站打车到侨港或银滩，约20-35元","入住酒店，稍作休整"]},
-  {h:"晚上",items:["<b>侨港风情街</b>美食夜市","24栋糖水铺、有间冰室、越乡小厨","今晚早点休息，明天赶早班船"]}
+  {h:"晚上",items:["侨港风情街美食夜市","24栋糖水铺、有间冰室、越乡小厨","今晚早点休息，明天赶早班船"]}
 ]},
 {badge:"D2",title:"8/16 北海 → 涠洲岛",sub:"早班船 · 登岛 · 滴水丹屏日落",blocks:[
-  {h:"上午：登岛",items:["北海客运港 → 涠洲岛，航程70-90分钟","<b>建议最早班船（约08:00-08:30）</b>","船票普通舱150元，上岛门票98元"]},
-  {h:"下午",items:["租电动车（40-80元/天）","<b>鳄鱼山火山公园</b>游览约1.5小时"]},
-  {h:"傍晚",items:["<b>滴水丹屏</b>看日落（约18:30-19:00）"]},
+  {h:"上午：登岛",items:["北海客运港 → 涠洲岛，航程70-90分钟","建议最早班船（约08:00-08:30）","船票普通舱150元，上岛门票98元"]},
+  {h:"下午",items:["租电动车（40-80元/天）","鳄鱼山火山公园游览约1.5小时"]},
+  {h:"傍晚",items:["滴水丹屏看日落（约18:30-19:00）"]},
   {h:"晚上",items:["南湾街吃海鲜、逛夜市"]}
 ],warn:"⚠️ 船票只在「来游吧」购买，提前7-14天；火山岩青苔滑，穿防滑鞋！"},
 {badge:"D3",title:"8/17 涠洲岛环岛",sub:"五彩滩日出 · 天主教堂",blocks:[
-  {h:"清晨",items:["<b>五彩滩看日出</b>（约06:00-06:30）"]},
-  {h:"上午",items:["<b>天主教堂</b>，免费；周边换乘观光车20元/人"]},
+  {h:"清晨",items:["五彩滩看日出（约06:00-06:30）"]},
+  {h:"上午",items:["天主教堂，免费；周边换乘观光车20元/人"]},
   {h:"下午",items:["午休避暑","16:00后南湾海鲜市场买海鲜加工"]},
   {h:"晚上",items:["南湾街美食、夜市"]}
 ]},
 {badge:"D4",title:"8/18 涠洲岛东线",sub:"贝壳沙滩 · 蓝桥 · 石螺口",blocks:[
-  {h:"上午",items:["贝壳沙滩散步捡贝壳","<b>蓝桥</b>打卡"]},
+  {h:"上午",items:["贝壳沙滩散步捡贝壳","蓝桥打卡"]},
   {h:"下午",items:["午休或咖啡馆，16:00后石螺口玩水"]},
-  {h:"傍晚",items:["<b>石螺口看日落</b>"]},
+  {h:"傍晚",items:["石螺口看日落"]},
   {h:"晚上",items:["清蒸石斑、椒盐皮皮虾、炒钉螺、海胆蒸蛋"]}
 ]},
 {badge:"D5",title:"8/19 涠洲岛自由日",sub:"浮潜 · 出海 · 赶海",blocks:[
@@ -540,7 +571,7 @@ const DAYS = [
 {badge:"D6",title:"8/20 涠洲岛 → 北海",sub:"下岛 · 北海老街",blocks:[
   {h:"上午",items:["海边发呆，买伴手礼，退房"]},
   {h:"中午/下午",items:["乘船回北海，建议12:00-14:30班次","入住老街附近酒店"]},
-  {h:"晚上",items:["北海老街逛骑楼","虾饼、牛腩粉；推荐<b>汪姐海鲜</b>"]}
+  {h:"晚上",items:["北海老街逛骑楼","虾饼、牛腩粉；推荐汪姐海鲜"]}
 ],warn:"⚠️ 老街别进路边拉客大排档。"},
 {badge:"D7",title:"8/21 北海市区漫游",sub:"银滩 · 流下村 · 冠头岭",blocks:[
   {h:"上午：银滩",items:["北海银滩踩沙玩水（免费）","水上项目可选"]},
@@ -553,7 +584,7 @@ const DAYS = [
 ]}
 ];
 
-const PACKING = [
+const PACKING_DEFAULT = [
 {g:"证件钱财",items:["身份证（乘船、住店、上岛必查）","学生证/老年证（上岛门票半价）","少量现金","旅行保险单截图"]},
 {g:"防晒防暑",items:["SPF50+防晒霜（多带一支）","晒后修复芦荟胶","墨镜、防晒衣、宽檐帽","藿香正气水/防暑药","挂脖小风扇"]},
 {g:"海岛玩水",items:["泳衣","手机防水袋","速干毛巾","浮潜面罩+呼吸管（可选）","溯溪鞋/防滑涉水鞋"]},
@@ -571,18 +602,23 @@ const DEFAULT_TODOS = [
   {t:"准备晕船药、防晒霜",done:0}
 ];
 
+function uid(){ return (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+"-"+Math.random().toString(16).slice(2)); }
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
 function todayStr(){
   const n = new Date();
-  return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`;
+  return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0");
 }
-function dayIndex(){
-  return DATES.indexOf(todayStr());
+function dayIndex(){ return DATES.indexOf(todayStr()); }
+function startOfDay(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function cloneDays(src){
+  return src.map(d=>({...d, blocks:(d.blocks||[]).map(b=>({h:b.h, items:[...b.items]}))}));
 }
-function startOfDay(d){
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+function clonePacking(src){
+  return src.map(g=>({id:uid(), g:g.g, items:g.items.map(t=>({id:uid(), t, done:0}))}));
 }
 
-/* ===== 倒计时 ===== */
 (function renderCount(){
   const now = startOfDay(new Date());
   const start = startOfDay(TRIP_START);
@@ -592,14 +628,12 @@ function startOfDay(d){
   const num = document.getElementById("countNum");
   const ms = 86400000;
   if(now < start){
-    const days = Math.round((start - now)/ms);
     label.textContent = "距离出发还有";
-    num.innerHTML = days + "<span>天</span>";
+    num.innerHTML = Math.round((start - now)/ms) + "<span>天</span>";
   }else if(now <= end){
-    const day = Math.round((now - start)/ms) + 1;
     card.classList.add("in-trip");
     label.textContent = "旅途进行中";
-    num.innerHTML = "Day " + day + "<span>/ 8</span>";
+    num.innerHTML = "Day " + (Math.round((now - start)/ms)+1) + "<span>/ 8</span>";
   }else{
     card.classList.add("done");
     label.textContent = "旅途已结束";
@@ -607,48 +641,18 @@ function startOfDay(d){
   }
 })();
 
-/* ===== 今日日程 ===== */
-(function renderToday(){
-  const idx = dayIndex();
-  const box = document.getElementById("todayBox");
-  if(idx < 0){
-    box.innerHTML = "";
-    return;
-  }
-  const d = DAYS[idx];
-  const o = OVERVIEW[idx];
-  box.innerHTML = `
-  <div class="today-card">
-    <span class="tag">今天 · Day ${idx+1}</span>
-    <h3>${d.title}</h3>
-    <div class="bed">住宿：${o.bed} ｜ ${d.sub}</div>
-    ${d.blocks.map(b=>`
-      <div class="block"><h4>${b.h}</h4>
-        <ul>${b.items.map(it=>`<li>${it}</li>`).join("")}</ul>
-      </div>`).join("")}
-    ${d.warn?`<div class="warn">${d.warn}</div>`:""}
-    ${d.tip?`<div class="tip">${d.tip}</div>`:""}
-  </div>`;
-})();
-
-/* ===== 待办 ===== */
 const TODO_KEY = "bh-todos-v1";
 let todos = [];
 try{
   const saved = localStorage.getItem(TODO_KEY);
-  todos = saved ? JSON.parse(saved) : DEFAULT_TODOS.map(x=>({...x,id:crypto.randomUUID()}));
-}catch(e){
-  todos = DEFAULT_TODOS.map(x=>({...x,id:String(Math.random()).slice(2)}));
-}
+  todos = saved ? JSON.parse(saved) : DEFAULT_TODOS.map(x=>({...x,id:uid()}));
+}catch(e){ todos = DEFAULT_TODOS.map(x=>({...x,id:uid()})); }
 function saveTodos(){ localStorage.setItem(TODO_KEY, JSON.stringify(todos)); }
 function renderTodos(){
   const list = document.getElementById("todoList");
   const done = todos.filter(t=>t.done).length;
-  document.getElementById("todoCnt").textContent = `${done} / ${todos.length}`;
-  if(!todos.length){
-    list.innerHTML = `<li class="todo-empty">暂无待办，上面添加一条吧</li>`;
-    return;
-  }
+  document.getElementById("todoCnt").textContent = done+" / "+todos.length;
+  if(!todos.length){ list.innerHTML = '<li class="todo-empty">暂无待办，上面添加一条吧</li>'; return; }
   list.innerHTML = todos.map(t=>`
     <li class="todo-item ${t.done?"done":""}" data-id="${t.id}">
       <label style="display:flex;align-items:flex-start;gap:10px;flex:1;cursor:pointer">
@@ -659,21 +663,15 @@ function renderTodos(){
       <button type="button" class="todo-del" aria-label="删除">×</button>
     </li>`).join("");
 }
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
-}
 function addTodo(){
   const input = document.getElementById("todoInput");
   const t = input.value.trim();
   if(!t) return;
-  todos.unshift({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),t,done:0});
-  input.value = "";
-  saveTodos(); renderTodos();
+  todos.unshift({id:uid(),t,done:0});
+  input.value=""; saveTodos(); renderTodos();
 }
 document.getElementById("todoAddBtn").addEventListener("click", addTodo);
-document.getElementById("todoInput").addEventListener("keydown",e=>{
-  if(e.key==="Enter"){ e.preventDefault(); addTodo(); }
-});
+document.getElementById("todoInput").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); addTodo(); }});
 document.getElementById("todoList").addEventListener("change",e=>{
   const item = e.target.closest(".todo-item");
   if(!item || e.target.type!=="checkbox") return;
@@ -684,93 +682,240 @@ document.getElementById("todoList").addEventListener("change",e=>{
 });
 document.getElementById("todoList").addEventListener("click",e=>{
   if(!e.target.classList.contains("todo-del")) return;
-  const item = e.target.closest(".todo-item");
-  todos = todos.filter(x=>x.id!==item.dataset.id);
+  todos = todos.filter(x=>x.id!==e.target.closest(".todo-item").dataset.id);
   saveTodos(); renderTodos();
 });
 renderTodos();
 
-/* ===== 行程总览+每日 ===== */
+const DAYS_KEY = "bh-days-v1";
+let daysData = cloneDays(DAYS_DEFAULT);
+try{ const saved = localStorage.getItem(DAYS_KEY); if(saved) daysData = JSON.parse(saved); }catch(e){}
+function saveDays(){ localStorage.setItem(DAYS_KEY, JSON.stringify(daysData)); }
 const todayIdx = dayIndex();
-document.getElementById("ovCard").innerHTML = OVERVIEW.map((o,i)=>`
-  <div class="ov-row ${o.island?"island":""} ${i===todayIdx?"today":""}">
-    <div class="ov-day"><span class="d">Day</span> ${o.d}<div style="font-size:10px;color:#9db4b8;font-weight:400">${o.date}</div></div>
-    <div class="ov-main"><b>${o.plan}</b><span class="hl">${o.hl}</span></div>
-    <span class="ov-bed ${o.island?"island":""}">${o.bed}</span>
-  </div>`).join("");
 
-document.getElementById("dayList").innerHTML = DAYS.map((d,i)=>`
-<div class="day ${i===todayIdx || (todayIdx<0 && i===0)?"open":""} ${i===todayIdx?"today-day":""}">
+function renderOverview(){
+  document.getElementById("ovCard").innerHTML = OVERVIEW.map((o,i)=>`
+    <div class="ov-row ${o.island?"island":""} ${i===todayIdx?"today":""}">
+      <div class="ov-day"><span class="d">Day</span> ${o.d}<div style="font-size:10px;color:#9db4b8;font-weight:400">${o.date}</div></div>
+      <div class="ov-main"><b>${o.plan}</b><span class="hl">${o.hl}</span></div>
+      <span class="ov-bed ${o.island?"island":""}">${o.bed}</span>
+    </div>`).join("");
+}
+function renderToday(){
+  const idx = dayIndex();
+  const box = document.getElementById("todayBox");
+  if(idx < 0){ box.innerHTML=""; return; }
+  const d = daysData[idx], o = OVERVIEW[idx];
+  box.innerHTML = `
+  <div class="today-card">
+    <span class="tag">今天 · Day ${idx+1}</span>
+    <h3>${escapeHtml(d.title)}</h3>
+    <div class="bed">住宿：${escapeHtml(o.bed)} ｜ ${escapeHtml(d.sub)}</div>
+    ${(d.blocks||[]).map(b=>`
+      <div class="block"><h4>${escapeHtml(b.h)}</h4>
+        <ul>${(b.items||[]).map(it=>`<li>${escapeHtml(it)}</li>`).join("")}</ul>
+      </div>`).join("")}
+    ${d.warn?`<div class="warn">${escapeHtml(d.warn)}</div>`:""}
+    ${d.tip?`<div class="tip">${escapeHtml(d.tip)}</div>`:""}
+  </div>`;
+}
+function renderDays(){
+  const openSet = new Set();
+  document.querySelectorAll("#dayList .day.open").forEach(el=>openSet.add(el.dataset.di));
+  document.getElementById("dayList").innerHTML = daysData.map((d,i)=>{
+    const isOpen = openSet.has(String(i)) || (openSet.size===0 && (i===todayIdx || (todayIdx<0 && i===0)));
+    return `
+<div class="day ${isOpen?"open":""} ${i===todayIdx?"today-day":""}" data-di="${i}">
   <button class="day-head" type="button">
-    <div class="day-badge"><span>DAY</span><span class="n">${d.badge.slice(1)}</span></div>
-    <div class="info"><h3>${d.title}${i===todayIdx?" · 今天":""}</h3><p>${d.sub}</p></div>
+    <div class="day-badge"><span>DAY</span><span class="n">${i+1}</span></div>
+    <div class="info"><h3>${escapeHtml(d.title)}${i===todayIdx?" · 今天":""}</h3><p>${escapeHtml(d.sub)}</p></div>
     <span class="chev">▼</span>
   </button>
   <div class="day-body"><div class="day-inner">
-    ${d.blocks.map(b=>`<div class="block"><h4>${b.h}</h4><ul>${b.items.map(it=>`<li>${it}</li>`).join("")}</ul></div>`).join("")}
-    ${d.warn?`<div class="warn">${d.warn}</div>`:""}
-    ${d.tip?`<div class="tip">${d.tip}</div>`:""}
+    ${(d.blocks||[]).map((b,bi)=>`
+      <div class="block" data-bi="${bi}">
+        <div class="block-hd">
+          <h4>${escapeHtml(b.h)}</h4>
+          <button type="button" class="icon-btn edit" data-act="edit-block" title="改时段名">✎</button>
+          <button type="button" class="icon-btn" data-act="del-block" title="删除时段">×</button>
+        </div>
+        ${(b.items||[]).map((it,ii)=>`
+          <div class="plan-item" data-ii="${ii}">
+            <div class="txt">${escapeHtml(it)}</div>
+            <button type="button" class="icon-btn edit" data-act="edit-item" title="修改">✎</button>
+            <button type="button" class="icon-btn" data-act="del-item" title="删除">×</button>
+          </div>`).join("")}
+        <div class="add-row">
+          <input type="text" placeholder="添加一条安排" maxlength="120" data-add-item>
+          <button type="button" data-act="add-item">添加</button>
+        </div>
+      </div>`).join("")}
+    ${d.warn?`<div class="warn">${escapeHtml(d.warn)}</div>`:""}
+    ${d.tip?`<div class="tip">${escapeHtml(d.tip)}</div>`:""}
+    <div class="edit-actions">
+      <button type="button" data-act="add-block">+ 加时段</button>
+      <button type="button" data-act="edit-title">改标题</button>
+      <button type="button" data-act="edit-sub">改副标题</button>
+      <button type="button" class="danger" data-act="reset-day">恢复本日默认</button>
+    </div>
   </div></div>
-</div>`).join("");
+</div>`;
+  }).join("");
+}
 
 document.getElementById("dayList").addEventListener("click",e=>{
-  const btn = e.target.closest(".day-head");
-  if(!btn) return;
-  btn.closest(".day").classList.toggle("open");
+  const head = e.target.closest(".day-head");
+  if(head && !e.target.closest("[data-act]")){ head.closest(".day").classList.toggle("open"); return; }
+  const actBtn = e.target.closest("[data-act]");
+  if(!actBtn) return;
+  e.preventDefault();
+  const dayEl = actBtn.closest(".day");
+  const di = Number(dayEl.dataset.di);
+  const act = actBtn.dataset.act;
+  const day = daysData[di];
+  const blockEl = actBtn.closest(".block");
+  const bi = blockEl ? Number(blockEl.dataset.bi) : -1;
+  if(act==="add-item"){
+    const input = blockEl.querySelector("[data-add-item]");
+    const t = (input.value||"").trim(); if(!t) return;
+    day.blocks[bi].items.push(t); input.value="";
+  }else if(act==="del-item"){
+    if(!confirm("删除这条安排？")) return;
+    day.blocks[bi].items.splice(Number(actBtn.closest(".plan-item").dataset.ii),1);
+  }else if(act==="edit-item"){
+    const ii = Number(actBtn.closest(".plan-item").dataset.ii);
+    const next = prompt("修改安排", day.blocks[bi].items[ii]);
+    if(next===null) return; const t=next.trim(); if(!t) return;
+    day.blocks[bi].items[ii]=t;
+  }else if(act==="edit-block"){
+    const next = prompt("修改时段名称", day.blocks[bi].h);
+    if(next===null) return; const t=next.trim(); if(!t) return;
+    day.blocks[bi].h=t;
+  }else if(act==="del-block"){
+    if(!confirm("删除整个时段？")) return;
+    day.blocks.splice(bi,1);
+  }else if(act==="add-block"){
+    const name = prompt("新时段名称（如：上午）","自由活动");
+    if(name===null) return;
+    day.blocks.push({h:name.trim()||"自由活动", items:[]});
+  }else if(act==="edit-title"){
+    const next = prompt("修改标题", day.title);
+    if(next===null) return; const t=next.trim(); if(!t) return;
+    day.title=t;
+  }else if(act==="edit-sub"){
+    const next = prompt("修改副标题", day.sub);
+    if(next===null) return; day.sub=next.trim();
+  }else if(act==="reset-day"){
+    if(!confirm("恢复本日为默认行程？")) return;
+    daysData[di]=cloneDays(DAYS_DEFAULT)[di];
+  }else return;
+  saveDays(); renderDays(); renderToday();
 });
+document.getElementById("dayList").addEventListener("keydown",e=>{
+  if(e.key!=="Enter") return;
+  const input = e.target.closest("[data-add-item]");
+  if(!input) return;
+  e.preventDefault();
+  input.parentElement.querySelector("[data-act=add-item]").click();
+});
+renderOverview(); renderDays(); renderToday();
 
-/* ===== 清单 ===== */
-const PACK_KEY = "bh-packing-v1";
-let packState = {};
-try{ packState = JSON.parse(localStorage.getItem(PACK_KEY)||"{}"); }catch(e){ packState={}; }
-const packEl = document.getElementById("packList");
-packEl.innerHTML = PACKING.map((grp,gi)=>`
-  <div class="cl-group"><h4>${grp.g}</h4>
-  ${grp.items.map((it,ii)=>{
-    const id = `p${gi}-${ii}`;
-    return `<label class="cl-item ${packState[id]?"done":""}" data-id="${id}">
-      <input type="checkbox" ${packState[id]?"checked":""}>
-      <span class="cl-box"><svg viewBox="0 0 24 24"><polyline points="4 13 10 19 20 6"/></svg></span>
-      <span class="cl-text">${it}</span>
-    </label>`;
-  }).join("")}
-  </div>`).join("");
-
-function refreshPack(){
-  const items = packEl.querySelectorAll(".cl-item");
-  let done = 0;
-  items.forEach(el=>{ if(el.classList.contains("done")) done++; });
-  document.getElementById("pText").textContent = `${done} / ${items.length}`;
-  document.getElementById("pBar").style.width = items.length ? (done/items.length*100)+"%" : "0%";
+const PACK_KEY = "bh-packing-v2";
+let packing = clonePacking(PACKING_DEFAULT);
+try{ const saved = localStorage.getItem(PACK_KEY); if(saved) packing = JSON.parse(saved); }catch(e){}
+function savePack(){ localStorage.setItem(PACK_KEY, JSON.stringify(packing)); }
+function renderPack(){
+  const packEl = document.getElementById("packList");
+  let total=0, done=0;
+  packing.forEach(g=>g.items.forEach(it=>{ total++; if(it.done) done++; }));
+  document.getElementById("pText").textContent = done+" / "+total;
+  document.getElementById("pBar").style.width = total ? (done/total*100)+"%" : "0%";
+  packEl.innerHTML = packing.map((grp,gi)=>`
+    <div class="cl-group" data-gi="${gi}">
+      <div class="block-hd" style="border-bottom:1px dashed rgba(18,58,69,.12);padding:10px 0 6px;margin-bottom:4px">
+        <h4 style="margin:0;font-size:14px">${escapeHtml(grp.g)}</h4>
+        <button type="button" class="icon-btn edit" data-act="edit-group" title="改分组名">✎</button>
+        <button type="button" class="icon-btn" data-act="del-group" title="删除分组">×</button>
+      </div>
+      ${grp.items.map((it,ii)=>`
+        <div class="cl-item ${it.done?"done":""}" data-ii="${ii}">
+          <label style="display:flex;align-items:flex-start;gap:8px;flex:1;cursor:pointer;min-width:0">
+            <input type="checkbox" ${it.done?"checked":""}>
+            <span class="cl-box"><svg viewBox="0 0 24 24"><polyline points="4 13 10 19 20 6"/></svg></span>
+            <span class="cl-text">${escapeHtml(it.t)}</span>
+          </label>
+          <button type="button" class="icon-btn edit" data-act="edit-pack" title="修改">✎</button>
+          <button type="button" class="icon-btn" data-act="del-pack" title="删除">×</button>
+        </div>`).join("")}
+      <div class="add-row">
+        <input type="text" placeholder="添加物品" maxlength="60" data-pack-add>
+        <button type="button" data-act="add-pack">添加</button>
+      </div>
+    </div>`).join("");
 }
+const packEl = document.getElementById("packList");
 packEl.addEventListener("change",e=>{
-  const label = e.target.closest(".cl-item");
-  if(!label) return;
-  const id = label.dataset.id;
-  if(e.target.checked){ packState[id]=1; label.classList.add("done"); }
-  else{ delete packState[id]; label.classList.remove("done"); }
-  localStorage.setItem(PACK_KEY, JSON.stringify(packState));
-  refreshPack();
+  const item = e.target.closest(".cl-item");
+  if(!item || e.target.type!=="checkbox") return;
+  const gi = Number(item.closest(".cl-group").dataset.gi);
+  packing[gi].items[Number(item.dataset.ii)].done = e.target.checked ? 1 : 0;
+  savePack(); renderPack();
+});
+packEl.addEventListener("click",e=>{
+  const actBtn = e.target.closest("[data-act]");
+  if(!actBtn) return;
+  const act = actBtn.dataset.act;
+  const group = actBtn.closest(".cl-group");
+  const gi = group ? Number(group.dataset.gi) : -1;
+  if(act==="add-pack"){
+    const input = group.querySelector("[data-pack-add]");
+    const t=(input.value||"").trim(); if(!t) return;
+    packing[gi].items.push({id:uid(), t, done:0}); input.value="";
+  }else if(act==="del-pack"){
+    if(!confirm("删除这件物品？")) return;
+    packing[gi].items.splice(Number(actBtn.closest(".cl-item").dataset.ii),1);
+  }else if(act==="edit-pack"){
+    const ii = Number(actBtn.closest(".cl-item").dataset.ii);
+    const next = prompt("修改物品", packing[gi].items[ii].t);
+    if(next===null) return; const t=next.trim(); if(!t) return;
+    packing[gi].items[ii].t=t;
+  }else if(act==="edit-group"){
+    const next = prompt("修改分组名", packing[gi].g);
+    if(next===null) return; const t=next.trim(); if(!t) return;
+    packing[gi].g=t;
+  }else if(act==="del-group"){
+    if(!confirm("删除整个分组？")) return;
+    packing.splice(gi,1);
+  }else return;
+  savePack(); renderPack();
+});
+packEl.addEventListener("keydown",e=>{
+  if(e.key!=="Enter") return;
+  const input = e.target.closest("[data-pack-add]");
+  if(!input) return;
+  e.preventDefault();
+  input.parentElement.querySelector("[data-act=add-pack]").click();
+});
+document.getElementById("packGroupAdd").addEventListener("click",()=>{
+  const input = document.getElementById("packGroupInput");
+  const t = input.value.trim(); if(!t) return;
+  packing.push({id:uid(), g:t, items:[]}); input.value="";
+  savePack(); renderPack();
+});
+document.getElementById("packGroupInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter"){ e.preventDefault(); document.getElementById("packGroupAdd").click(); }
 });
 document.getElementById("resetBtn").addEventListener("click",()=>{
-  if(!confirm("确定清空所有勾选吗？")) return;
-  packState = {};
-  localStorage.removeItem(PACK_KEY);
-  packEl.querySelectorAll(".cl-item").forEach(el=>{
-    el.classList.remove("done");
-    el.querySelector("input").checked = false;
-  });
-  refreshPack();
+  if(!confirm("恢复默认清单？当前勾选和自定义都会清空")) return;
+  packing = clonePacking(PACKING_DEFAULT); savePack(); renderPack();
 });
-refreshPack();
+renderPack();
 
-/* ===== Tab 切换 ===== */
 document.querySelector(".tabbar").addEventListener("click",e=>{
   const btn = e.target.closest("button[data-tab]");
   if(!btn) return;
-  const tab = btn.dataset.tab;
   document.querySelectorAll(".tabbar button").forEach(b=>b.classList.toggle("active", b===btn));
-  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active", p.id==="panel-"+tab));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active", p.id==="panel-"+btn.dataset.tab));
   window.scrollTo(0,0);
 });
 document.getElementById("guideNav").addEventListener("click",e=>{
@@ -779,6 +924,7 @@ document.getElementById("guideNav").addEventListener("click",e=>{
   document.querySelectorAll("#guideNav button").forEach(b=>b.classList.toggle("active", b===btn));
   document.querySelectorAll(".subpanel").forEach(p=>p.classList.toggle("active", p.id==="sub-"+btn.dataset.sub));
 });
+
 </script>
 </body>
 </html>
