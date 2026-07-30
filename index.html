@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>北海·涠洲岛 8天7晚</title>
+<style>
+:root{
+  --ink:#123a45;
+  --deep:#0e4f5c;
+  --sea:#2a8a94;
+  --foam:#7fc8bc;
+  --mist:#e3f0ee;
+  --sand:#f6efe1;
+  --paper:#fbf7ec;
+  --coral:#e8663c;
+  --coral-soft:#f9d9c8;
+  --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--sand);
+  color:var(--ink);
+  line-height:1.75;
+  background-image:radial-gradient(circle at 15% 20%,rgba(127,200,188,.14),transparent 40%),
+                   radial-gradient(circle at 85% 60%,rgba(232,102,60,.08),transparent 45%);
+}
+.serif{font-family:"Songti SC","STSong","Noto Serif SC","SimSun",serif}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#0e4f5c 0%,#166b76 55%,#2a8a94 100%);
+  color:#fdfbf5;padding:64px 22px 74px;text-align:left;
+}
+.hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:-1px;height:60px;
+  background:var(--sand);
+  clip-path:polygon(0 55%,4% 48%,9% 52%,15% 44%,22% 51%,30% 42%,38% 50%,46% 43%,55% 51%,63% 44%,71% 52%,79% 45%,87% 53%,94% 47%,100% 52%,100% 100%,0 100%);
+}
+.hero .kicker{letter-spacing:.35em;font-size:11px;color:var(--foam);text-transform:uppercase}
+.hero h1{font-size:clamp(30px,8vw,52px);line-height:1.2;margin:10px 0 6px;font-weight:900}
+.hero h1 .accent{color:#ffb99b}
+.hero .sub{color:#cfe8e4;font-size:14px}
+.hero .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.hero .tag{
+  font-size:12px;padding:5px 12px;border:1px solid rgba(255,255,255,.35);
+  border-radius:999px;color:#eaf6f4;backdrop-filter:blur(4px)
+}
+.hero .tag.hot{background:var(--coral);border-color:var(--coral);color:#fff}
+
+/* ---------- NAV ---------- */
+nav{
+  position:sticky;top:0;z-index:50;background:rgba(251,247,236,.92);
+  backdrop-filter:blur(10px);border-bottom:1px solid rgba(18,58,69,.08);
+  overflow-x:auto;white-space:nowrap;padding:10px 14px;
+  scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none}
+nav a{
+  display:inline-block;font-size:13px;color:var(--deep);text-decoration:none;
+  padding:6px 13px;margin-right:6px;border-radius:999px;background:#fff;
+  border:1px solid rgba(18,58,69,.1);transition:all .2s
+}
+nav a:active,nav a:hover{background:var(--deep);color:#fff}
+
+/* ---------- LAYOUT ---------- */
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+section{padding:34px 0 8px}
+.sec-title{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.sec-title .num{font-size:12px;color:var(--coral);letter-spacing:.2em}
+.sec-title h2{font-size:26px;color:var(--deep);font-weight:900}
+.sec-desc{color:#5b7a80;font-size:13px;margin-bottom:18px}
+
+/* ---------- OVERVIEW TABLE ---------- */
+.ov-card{background:var(--paper);border-radius:var(--radius);overflow:hidden;
+  box-shadow:0 10px 30px rgba(14,79,92,.1);border:1px solid rgba(18,58,69,.07)}
+.ov-row{display:flex;gap:10px;padding:13px 14px;border-bottom:1px dashed rgba(18,58,69,.12);font-size:13px;align-items:flex-start}
+.ov-row:last-child{border-bottom:none}
+.ov-row.island{background:linear-gradient(90deg,rgba(127,200,188,.18),transparent)}
+.ov-day{flex:none;width:52px;font-weight:700;color:var(--deep)}
+.ov-day .d{font-size:11px;color:var(--coral);font-weight:600}
+.ov-main{flex:1}
+.ov-main b{color:var(--ink)}
+.ov-main .hl{display:block;color:#5b7a80;font-size:12px;margin-top:2px}
+.ov-bed{flex:none;font-size:11px;padding:3px 9px;border-radius:999px;background:var(--mist);color:var(--deep)}
+.ov-bed.island{background:var(--foam);color:#fff}
+
+/* ---------- DAY CARDS ---------- */
+.day{
+  background:var(--paper);border-radius:var(--radius);margin-bottom:14px;
+  border:1px solid rgba(18,58,69,.07);box-shadow:0 8px 24px rgba(14,79,92,.08);
+  overflow:hidden;
+}
+.day-head{
+  width:100%;display:flex;align-items:center;gap:12px;padding:15px 16px;
+  background:none;border:none;cursor:pointer;text-align:left;font-family:inherit;
+}
+.day-badge{
+  flex:none;width:46px;height:46px;border-radius:14px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;color:#fff;background:linear-gradient(145deg,var(--sea),var(--deep));
+  box-shadow:0 4px 10px rgba(14,79,92,.25)
+}
+.day-badge .n{font-size:17px;font-weight:800;line-height:1}
+.day-badge .t{font-size:9px;letter-spacing:.1em;opacity:.85}
+.day-head .info{flex:1;min-width:0}
+.day-head .info h3{font-size:16px;color:var(--ink);font-weight:700}
+.day-head .info p{font-size:12px;color:#5b7a80;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.day-head .chev{flex:none;color:var(--sea);transition:transform .3s;font-size:14px}
+.day.open .chev{transform:rotate(180deg)}
+.day-body{max-height:0;overflow:hidden;transition:max-height .45s ease}
+.day.open .day-body{max-height:3000px}
+.day-inner{padding:0 16px 16px;border-top:1px dashed rgba(18,58,69,.12)}
+.block{margin-top:13px}
+.block h4{
+  font-size:13px;color:var(--deep);margin-bottom:5px;display:flex;align-items:center;gap:7px;font-weight:700
+}
+.block h4::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--coral);transform:rotate(45deg);flex:none}
+.block ul{list-style:none}
+.block li{font-size:13.5px;padding-left:16px;position:relative;margin-bottom:3px}
+.block li::before{content:"·";position:absolute;left:4px;color:var(--sea);font-weight:900}
+.block li b{color:var(--deep)}
+.warn{
+  background:#fff6ef;border-left:3px solid var(--coral);border-radius:8px;
+  padding:9px 12px;font-size:12.5px;color:#8a4a2b;margin-top:10px
+}
+.tip{
+  background:var(--mist);border-left:3px solid var(--sea);border-radius:8px;
+  padding:9px 12px;font-size:12.5px;color:var(--deep);margin-top:10px
+}
+
+/* ---------- GENERIC TABLES ---------- */
+.tbl{width:100%;border-collapse:collapse;background:var(--paper);border-radius:14px;overflow:hidden;
+  box-shadow:0 6px 20px rgba(14,79,92,.08);font-size:13px;margin-bottom:14px}
+.tbl th{background:var(--deep);color:#fff;text-align:left;padding:10px 12px;font-weight:600;font-size:12px}
+.tbl td{padding:10px 12px;border-bottom:1px solid rgba(18,58,69,.08);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td b{color:var(--deep)}
+
+/* ---------- TWO COL CARDS ---------- */
+.grid2{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:560px){.grid2{grid-template-columns:1fr 1fr}}
+.mini{background:var(--paper);border-radius:14px;padding:14px 16px;border:1px solid rgba(18,58,69,.07)}
+.mini h4{font-size:14px;color:var(--deep);margin-bottom:8px}
+.mini ul{list-style:none}
+.mini li{font-size:13px;margin-bottom:4px;padding-left:14px;position:relative}
+.mini li::before{content:"·";position:absolute;left:2px;color:var(--coral);font-weight:900}
+
+/* ---------- CHECKLIST ---------- */
+.progress-card{
+  position:sticky;top:57px;z-index:40;background:var(--paper);border-radius:14px;
+  padding:12px 16px;margin-bottom:14px;box-shadow:0 8px 22px rgba(14,79,92,.12);
+  border:1px solid rgba(18,58,69,.08)
+}
+.progress-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--deep);margin-bottom:8px}
+.progress-top b{font-size:15px}
+.bar{height:8px;background:#e7e0cd;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--foam),var(--sea),var(--deep));
+  transition:width .4s ease}
+.reset{background:none;border:1px solid rgba(18,58,69,.2);color:#5b7a80;font-size:11px;
+  padding:3px 10px;border-radius:99px;cursor:pointer;font-family:inherit}
+.cl-group{background:var(--paper);border-radius:14px;padding:6px 16px 10px;margin-bottom:12px;
+  border:1px solid rgba(18,58,69,.07)}
+.cl-group h4{font-size:14px;color:var(--deep);padding:10px 0 6px;border-bottom:1px dashed rgba(18,58,69,.12);margin-bottom:6px}
+.cl-item{display:flex;align-items:flex-start;gap:10px;padding:8px 2px;cursor:pointer;user-select:none}
+.cl-item input{display:none}
+.cl-box{
+  flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--sea);
+  margin-top:2px;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;background:#fff
+}
+.cl-box svg{width:12px;height:12px;stroke:#fff;stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all .2s}
+.cl-item.done .cl-box{background:var(--sea);border-color:var(--sea)}
+.cl-item.done .cl-box svg{opacity:1;transform:scale(1)}
+.cl-text{font-size:14px;transition:all .2s}
+.cl-item.done .cl-text{color:#9db4b8;text-decoration:line-through}
+
+/* ---------- STEPS ---------- */
+.step{display:flex;gap:13px;margin-bottom:4px}
+.step .rail{flex:none;display:flex;flex-direction:column;align-items:center}
+.step .dot{width:30px;height:30px;border-radius:50%;background:var(--coral);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;
+  box-shadow:0 4px 10px rgba(232,102,60,.3)}
+.step .line{width:2px;flex:1;background:linear-gradient(var(--coral-soft),transparent);min-height:14px}
+.step .body{flex:1;padding-bottom:18px}
+.step .body h4{font-size:15px;color:var(--deep)}
+.step .body p{font-size:13px;color:#43666d}
+.step .body ul{list-style:none;margin-top:4px}
+.step .body li{font-size:13px;padding-left:14px;position:relative;margin-bottom:2px}
+.step .body li::before{content:"·";position:absolute;left:2px;color:var(--coral);font-weight:900}
+
+footer{
+  margin-top:46px;background:var(--deep);color:#bfe0db;text-align:center;
+  padding:30px 20px calc(30px + env(safe-area-inset-bottom));font-size:12.5px
+}
+footer .serif{font-size:17px;color:#fdfbf5;margin-bottom:6px}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="kicker serif">Beihai · Weizhou Island</div>
+  <h1 class="serif">北海 · 涠洲岛<br><span class="accent">8天7晚</span> 海岛慢游</h1>
+  <p class="sub">2026.08.15 — 08.22 ｜ 成都出发 ｜ 先上岛玩透，出岛再慢游北海</p>
+  <div class="tags">
+    <span class="tag hot">Day 2 早班船上岛</span>
+    <span class="tag">涠洲岛 4 晚连住</span>
+    <span class="tag">台风缓冲设计</span>
+    <span class="tag">首次乘机指南</span>
+  </div>
+</header>
+
+<nav id="nav">
+  <a href="#overview">总览</a>
+  <a href="#days">每日行程</a>
+  <a href="#traffic">交通</a>
+  <a href="#stay">住宿</a>
+  <a href="#food">美食</a>
+  <a href="#budget">预算</a>
+  <a href="#typhoon">台风预警</a>
+  <a href="#flight">乘机指南</a>
+  <a href="#packing">行前清单</a>
+</nav>
+
+<div class="wrap">
+
+<!-- ============ 总览 ============ -->
+<section id="overview" class="reveal">
+  <div class="sec-title"><span class="num">01</span><h2 class="serif">行程总览</h2></div>
+  <p class="sec-desc">把不可控的轮渡放前半段：万一遇台风停航，后半段北海行程做缓冲，不影响返程航班。</p>
+  <div class="ov-card" id="ovCard"></div>
+</section>
+
+<!-- ============ 每日行程 ============ -->
+<section id="days" class="reveal">
+  <div class="sec-title"><span class="num">02</span><h2 class="serif">每日详细行程</h2></div>
+  <p class="sec-desc">点击卡片展开当天安排。正午 12:00-15:00 紫外线最强，尽量安排午休。</p>
+  <div id="dayList"></div>
+</section>
+
+<!-- ============ 交通 ============ -->
+<section id="traffic" class="reveal">
+  <div class="sec-title"><span class="num">03</span><h2 class="serif">交通方式</h2></div>
+  <div class="grid2">
+    <div class="mini">
+      <h4>成都 ↔ 北海</h4>
+      <ul>
+        <li><b>飞机（推荐）</b>：直飞约2小时，暑期约600-1000元</li>
+        <li><b>高铁</b>：成都东→南宁东→北海，约8小时，约510元</li>
+      </ul>
+    </div>
+    <div class="mini">
+      <h4>北海 ↔ 涠洲岛（轮渡）</h4>
+      <ul>
+        <li>航程 <b>70-90分钟</b>，普通舱 <b>150元/单程</b></li>
+        <li>购票：公众号 <b>「来游吧」</b>，提前7-14天</li>
+        <li>上岛门票 <b>98元/人</b>（含鳄鱼山等）</li>
+        <li>每日限流约1.2万人，无门票不能买船票</li>
+        <li>去程赶早班船，回程选中午班次</li>
+      </ul>
+    </div>
+    <div class="mini">
+      <h4>涠洲岛内交通</h4>
+      <ul>
+        <li><b>电动车 40-80元/天</b>（首选，租4天可谈价）</li>
+        <li>观光车约200元/天</li>
+        <li>三轮车单程10-30元</li>
+      </ul>
+    </div>
+    <div class="mini">
+      <h4>北海市内</h4>
+      <ul>
+        <li>机场/高铁站→银滩/侨港 打车约20-35元</li>
+        <li>市区景点间打车或共享电动车即可</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 住宿 ============ -->
+<section id="stay" class="reveal">
+  <div class="sec-title"><span class="num">04</span><h2 class="serif">住宿推荐</h2></div>
+  <table class="tbl">
+    <tr><th>晚数</th><th>区域</th><th>参考价</th></tr>
+    <tr><td><b>Day 1</b>（1晚）</td><td>北海·<b>侨港镇附近</b>（近夜市，方便赶早班船）</td><td>200-400元</td></tr>
+    <tr><td><b>Day 2-5</b>（4晚）</td><td>涠洲岛·<b>南湾街附近</b>（吃海鲜方便，4晚连住同一家）</td><td>300-600元/晚</td></tr>
+    <tr><td><b>Day 6-7</b>（2晚）</td><td>北海·<b>老街附近</b>（逛吃方便）</td><td>200-400元/晚</td></tr>
+  </table>
+  <div class="mini">
+    <h4>涠洲岛参考民宿</h4>
+    <ul>
+      <li><b>南湾汐拾海景民宿</b>：南湾街旁，老板陪同采购海鲜，川味加工</li>
+      <li><b>一屿一宿（五彩滩店）</b>：推窗见海，看日出方便</li>
+      <li><b>海之緣HOME（滴水丹屏店）</b>：步行3分钟到海边，日落首选</li>
+      <li><b>与海为邻花园民宿（贝壳沙滩店）</b>：安静，近天主教堂</li>
+    </ul>
+  </div>
+  <div class="warn">⚠️ 暑期房价上浮，提前半个月预订，优先选提供码头免费接送的民宿。</div>
+</section>
+
+<!-- ============ 美食 ============ -->
+<section id="food" class="reveal">
+  <div class="sec-title"><span class="num">05</span><h2 class="serif">美食清单</h2></div>
+  <div class="grid2">
+    <div class="mini">
+      <h4>北海必吃</h4>
+      <ul>
+        <li><b>24栋糖水铺</b>：香芋西米、五加糖水（侨港）</li>
+        <li><b>有间冰室</b>：芒果炒冰（侨港）</li>
+        <li><b>汪姐海鲜</b>：美团188元/2人，活虾现捞（老街）</li>
+        <li><b>越乡小厨</b>：海鲜（侨港）</li>
+        <li>虾饼、牛腩粉、越南卷粉、酸嘢</li>
+      </ul>
+    </div>
+    <div class="mini">
+      <h4>涠洲岛必吃</h4>
+      <ul>
+        <li><b>南湾海鲜市场自买+加工</b>（加工费10-20元/道）</li>
+        <li>清蒸石斑鱼、椒盐皮皮虾、炒钉螺、海胆蒸蛋</li>
+        <li>香蕉饼、椰子冻、烤生蚝</li>
+        <li>火山蕉（约5元一把）、菠萝</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tip">💡 买海鲜早8点、下午4点最新鲜；称重前把水倒掉，记得砍价。</div>
+</section>
+
+<!-- ============ 预算 ============ -->
+<section id="budget" class="reveal">
+  <div class="sec-title"><span class="num">06</span><h2 class="serif">费用预算</h2></div>
+  <p class="sec-desc">单人，不含成都↔北海大交通。</p>
+  <table class="tbl">
+    <tr><th>项目</th><th>预估费用</th></tr>
+    <tr><td>涠洲岛往返船票</td><td>约300元（150×2）</td></tr>
+    <tr><td>上岛门票</td><td>98元</td></tr>
+    <tr><td>岛上电动车（4天）</td><td>160-320元</td></tr>
+    <tr><td>住宿（7晚，中等）</td><td>1400-2800元</td></tr>
+    <tr><td>餐饮（8天）</td><td>800-1200元</td></tr>
+    <tr><td>可选门票（红树林等）</td><td>0-160元</td></tr>
+    <tr><td><b>合计</b></td><td><b>约 2800-4900 元</b></td></tr>
+  </table>
+</section>
+
+<!-- ============ 台风预警 ============ -->
+<section id="typhoon" class="reveal">
+  <div class="sec-title"><span class="num">07</span><h2 class="serif">重要提示</h2></div>
+  <div class="warn" style="margin-top:0">
+    <b>台风风险（8月必读）</b><br>
+    8月是涠洲岛台风活跃期，可能轮渡停航、岛上停水停电。本行程 Day 2 就上岛，若遇停航可推迟1-2天，用北海行程缓冲，不影响 Day 8 返程。
+  </div>
+  <div class="mini" style="margin-top:12px">
+    <h4>应对建议</h4>
+    <ul>
+      <li>出发前盯紧中央气象台+北海市气象局台风路径</li>
+      <li>酒店选<b>可免费取消</b>的房型</li>
+      <li>买含「旅程延误/取消」条款的旅行险</li>
+      <li>关注「来游吧」公众号官方通知</li>
+      <li>停航船票可原渠道<b>零手续费退票</b></li>
+      <li>遇撤离指令第一时间配合，安全第一</li>
+    </ul>
+  </div>
+  <div class="mini" style="margin-top:12px">
+    <h4>🚫 避坑指南</h4>
+    <ul>
+      <li>船票只认「来游吧」官方渠道，不买黄牛票</li>
+      <li>海鲜自己买+找店加工，称重倒掉水</li>
+      <li>租电动车前拍全车车况、电量照片</li>
+      <li>老街不进路边拉客大排档</li>
+      <li>不轻信路边无证潜水项目</li>
+      <li>火山岩青苔滑，必穿防滑鞋</li>
+    </ul>
+  </div>
+  <table class="tbl" style="margin-top:12px">
+    <tr><th>提前预订</th><th>渠道</th><th>提前量</th></tr>
+    <tr><td>成都→北海机票</td><td>航司官网/携程</td><td>2-4周</td></tr>
+    <tr><td>往返船票</td><td>「来游吧」公众号</td><td><b>7-14天</b></td></tr>
+    <tr><td>涠洲岛民宿（4晚）</td><td>携程/美团</td><td><b>半个月</b></td></tr>
+    <tr><td>北海住宿（3晚）</td><td>携程/美团</td><td>1-2周</td></tr>
+  </table>
+</section>
+
+<!-- ============ 乘机指南 ============ -->
+<section id="flight" class="reveal">
+  <div class="sec-title"><span class="num">08</span><h2 class="serif">首次乘机指南</h2></div>
+
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="mini">
+      <h4>🎒 必须随身，禁止托运</h4>
+      <ul>
+        <li><b>充电宝 ≤2万毫安</b>（超2万不能上机）</li>
+        <li>手机、平板、相机等含锂电池设备</li>
+        <li>身份证、现金、贵重物品</li>
+      </ul>
+    </div>
+    <div class="mini">
+      <h4>🧳 必须托运，禁止随身</h4>
+      <ul>
+        <li>单瓶 <b>&gt;100ml</b> 液体（防晒、驱蚊水、饮料）</li>
+        <li>刀具、剪刀</li>
+        <li>压力罐喷雾（易燃标志的托运也不行）</li>
+      </ul>
+    </div>
+  </div>
+  <div class="warn">🚫 随身+托运都禁止：打火机/火柴、＞70%酒精、自热火锅。<br><b>口诀：电池随身、大瓶液体和刀托运、打火机留家里。</b></div>
+
+  <div class="mini" style="margin-top:12px">
+    <h4>⚖️ 托运限重怎么算</h4>
+    <ul>
+      <li>经济舱免费 <b>20kg/人</b>（以机票订单页为准）</li>
+      <li>随身1件 ≤5kg，20寸登机箱可直接带上机</li>
+      <li>超重费 ≈ 经济舱全价票 ×1.5%/kg（成都-北海约 <b>22元/kg</b>）</li>
+      <li>回程海鲜特产易超重，提前称重或寄快递更划算</li>
+    </ul>
+  </div>
+
+  <div style="margin-top:18px">
+    <div class="step"><div class="rail"><div class="dot">1</div><div class="line"></div></div>
+      <div class="body"><h4>值机 + 托运（提前2小时到机场）</h4>
+        <ul>
+          <li>按机场大屏找到航司值机柜台，给身份证，行李放传送带称重</li>
+          <li>拿到登机牌：确认登机口、座位号、登机时间</li>
+          <li>可提前用「航旅纵横」App 网上值机选座</li>
+          <li>⚠️ 起飞前40-45分钟停办托运，别卡点</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step"><div class="rail"><div class="dot">2</div><div class="line"></div></div>
+      <div class="body"><h4>安检</h4>
+        <ul>
+          <li>出示登机牌+身份证</li>
+          <li>手机、充电宝、电脑、雨伞单独放筐</li>
+          <li>水过不了安检，过完再买或接直饮水</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step"><div class="rail"><div class="dot">3</div><div class="line"></div></div>
+      <div class="body"><h4>候机</h4>
+        <ul>
+          <li>按登机牌编号找登机口（如 B12）</li>
+          <li>起飞前30-40分钟开始登机，前15-20分钟停止</li>
+          <li>听广播，登机口可能临时变更</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step"><div class="rail"><div class="dot">4</div><div class="line"></div></div>
+      <div class="body"><h4>登机飞行（约2小时）</h4>
+        <ul>
+          <li>按号入座：数字=排数，字母A/F靠窗</li>
+          <li>手机开飞行模式；起降时收起小桌板、调直椅背</li>
+          <li>耳朵闷正常，吞咽口水或嚼口香糖缓解</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step"><div class="rail"><div class="dot">5</div></div>
+      <div class="body"><h4>下机取行李</h4>
+        <ul>
+          <li>跟「行李提取」指示牌走，看屏幕找航班对应转盘</li>
+          <li>核对登机牌上的行李牌编号，防止拿错</li>
+          <li>没托运直接出站，省20分钟</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 行前清单 ============ -->
+<section id="packing" class="reveal">
+  <div class="sec-title"><span class="num">09</span><h2 class="serif">行前必备清单</h2></div>
+  <p class="sec-desc">勾选状态自动保存在本机浏览器，换设备需重新勾选。</p>
+  <div class="progress-card">
+    <div class="progress-top">
+      <span>打包进度 <b id="pText">0 / 0</b></span>
+      <button class="reset" id="resetBtn">清空重填</button>
+    </div>
+    <div class="bar"><i id="pBar"></i></div>
+  </div>
+  <div id="packList"></div>
+  <div class="tip">🧺 不用带：赶海工具（小桶、铲子岛上几块钱一套）、洗漱用品（民宿都有）。</div>
+</section>
+
+</div>
+
+<footer>
+  <div class="serif">愿海风温柔，旅途平安 🌊</div>
+  北海 · 涠洲岛 8天7晚 ｜ 2026.08.15 - 08.22<br>
+  如遇台风等不可抗力，灵活调整，安全第一
+</footer>
+
+<script>
+/* ================= 数据 ================= */
+const OVERVIEW = [
+  {d:1,date:"8/15",plan:"成都 → 北海",hl:"抵达，侨港风情街夜市",bed:"北海·侨港",island:false},
+  {d:2,date:"8/16",plan:"北海 → 涠洲岛",hl:"早班船上岛、租电动车、滴水丹屏日落",bed:"涠洲岛",island:true},
+  {d:3,date:"8/17",plan:"涠洲岛环岛",hl:"五彩滩日出、鳄鱼山火山公园、天主教堂",bed:"涠洲岛",island:true},
+  {d:4,date:"8/18",plan:"涠洲岛东线",hl:"贝壳沙滩、蓝桥、石螺口日落",bed:"涠洲岛",island:true},
+  {d:5,date:"8/19",plan:"涠洲岛自由日",hl:"浮潜/出海/赶海，海岛慢生活（机动日）",bed:"涠洲岛",island:true},
+  {d:6,date:"8/20",plan:"涠洲岛 → 北海",hl:"中午下岛，北海老街夜景",bed:"北海·老街",island:false},
+  {d:7,date:"8/21",plan:"北海市区漫游",hl:"银滩玩水、流下村、冠头岭日落",bed:"北海·老街",island:false},
+  {d:8,date:"8/22",plan:"北海 → 成都",hl:"上午自由活动，下午返程",bed:"—",island:false}
+];
+
+const DAYS = [
+{badge:"D1",title:"8/15 成都 → 北海",sub:"抵达 · 侨港夜市",blocks:[
+  {h:"交通（二选一）",items:["<b>飞机（推荐）</b>：成都天府/双流 → 北海福成，直飞约2小时；暑期票价浮动大，提前2-4周订","<b>高铁</b>：成都东→南宁东→北海，约8小时，二等座约510元/人"]},
+  {h:"抵达后",items:["机场/高铁站打车到侨港或银滩区域，约20-35元","入住酒店，稍作休整"]},
+  {h:"晚上",items:["<b>侨港风情街</b>——北海人气最高美食夜市","24栋糖水铺（香芋西米、五加糖水）、有间冰室（芒果炒冰）、越乡小厨（海鲜）","人均约25-50元，今晚早点休息，明天赶早班船"]}
+]}],
+{badge:"D2",title:"8/16 北海 → 涠洲岛",sub:"早班船 · 登岛 · 滴水丹屏日落",blocks:[
+  {h:"上午：登岛",items:["北海国际客运港 → 涠洲岛西角码头，航程70-90分钟","<b>建议乘最早班船（约08:00-08:30）</b>","船票：普通舱150元/人（商务180/特等240）","上岛门票98元/人，民宿码头免费接送"]},
+  {h:"下午",items:["第一件事：<b>租电动车</b>（40-80元/天，租4天可谈价）","<b>鳄鱼山火山公园</b>（5A），游览约1.5小时"]},
+  {h:"傍晚",items:["<b>滴水丹屏</b>看日落，海蚀崖壁+火烧云（约18:30-19:00）"]},
+  {h:"晚上",items:["<b>南湾街</b>吃海鲜、逛夜市"]}
+],warn:"⚠️ 船票只能在「来游吧」公众号/小程序购买，提前7-14天锁票；每日限流1.2万人，没有上岛门票买不了船票。火山岩青苔滑，穿防滑鞋！"}],
+{badge:"D3",title:"8/17 涠洲岛环岛",sub:"五彩滩日出 · 鳄鱼山 · 天主教堂",blocks:[
+  {h:"清晨",items:["<b>五彩滩看日出</b>——退潮后火山岩五彩斑斓（日出约06:00-06:30）"]},
+  {h:"上午",items:["<b>天主教堂</b>——百年哥特式珊瑚石建筑，免费","教堂周边禁电动车，换乘观光车20元/人"]},
+  {h:"下午",items:["回民宿午休避暑","16:00后去<b>南湾海鲜市场</b>买海鲜，找店加工（10-20元/道）","买时砍价，称重把水倒掉"]},
+  {h:"晚上",items:["南湾街继续探索美食、逛夜市"]}
+]}],
+{badge:"D4",title:"8/18 涠洲岛东线",sub:"贝壳沙滩 · 蓝桥 · 石螺口日落",blocks:[
+  {h:"上午",items:["<b>贝壳沙滩</b>散步、捡贝壳、发呆","<b>蓝桥</b>打卡——废弃蓝色石油码头，网红拍照点"]},
+  {h:"下午",items:["午休或咖啡馆发呆，16:00后去<b>石螺口海滩</b>玩水"]},
+  {h:"傍晚",items:["<b>石螺口看日落</b>——全岛最佳日落观赏点之一"]},
+  {h:"晚上",items:["海鲜大餐：清蒸石斑鱼、椒盐皮皮虾、炒钉螺、海胆蒸蛋"]}
+]}],
+{badge:"D5",title:"8/19 涠洲岛自由日",sub:"浮潜 · 出海 · 赶海（机动日）",blocks:[
+  {h:"全天自由",items:["睡到自然醒，南湾街咖啡馆发呆","<b>浮潜</b>或<b>包小船出海</b>（约300元/船，视天气）","沙滩赶海：退潮挖螺抓螃蟹","<b>骑行环岛</b>：全岛约13公里，电动车约2小时","二刷滴水丹屏/五彩滩补拍照"]},
+  {h:"美食",items:["中午南湾市场买海鲜回民宿加工","火山蕉（约5元一把）、椰子冻、烤生蚝"]}
+],tip:"💡 这天是全行程机动日：前几天若因台风耽误，可用今天补核心景点。"}],
+{badge:"D6",title:"8/20 涠洲岛 → 北海",sub:"下岛 · 北海老街夜景",blocks:[
+  {h:"上午",items:["岛上最后半天：海边发呆，买伴手礼（香蕉干、海鸭蛋）","退房，民宿送至码头"]},
+  {h:"中午/下午",items:["乘船返回北海，<b>建议选12:00-14:30班次</b>，留足余量","入住老街附近酒店"]},
+  {h:"傍晚/晚上",items:["<b>北海老街</b>（珠海路）百年骑楼，免费","吃虾饼、牛腩粉（人均约30元）、喝凉茶","推荐巷子里<b>汪姐海鲜</b>，美团188元够2人"]}
+],warn:"⚠️ 老街晚餐别进路边拉客大排档，人均100+的海鲜套餐多半是冷冻货。"}],
+{badge:"D7",title:"8/21 北海市区漫游",sub:"银滩 · 流下村 · 冠头岭日落",blocks:[
+  {h:"上午：银滩",items:["<b>北海银滩</b>「天下第一滩」，免费，开放6:00-23:00","上午人少，踩沙玩水","水上项目：拖拽冲浪板220元、快艇158元"]},
+  {h:"下午",items:["中午回酒店午休","<b>流下村</b>——文艺小村庄，拍照打卡","<b>冠头岭国家森林公园</b>——礁石海滩+灯塔日落，免费"]},
+  {h:"晚上",items:["侨港风情街补吃：越南卷粉、酸嘢、炒冰"]}
+],tip:"🌧 雨天备选：北海海底世界（约98元）或金海湾红树林赶海（约80元，初一十五前后退大潮）"}],
+{badge:"D8",title:"8/22 北海 → 成都",sub:"自由活动 · 返程",blocks:[
+  {h:"上午（二选一）",items:["<b>银滩</b>：早起最后踩一次沙","<b>侨港风情街</b>：买伴手礼，再吃碗糖水"]},
+  {h:"返程",items:["北海福成机场 → 成都，直飞约2小时","或高铁：北海→南宁东→成都东","<b>建议选14:00以后的班次</b>，上午不赶"]}
+]}]
+};
+
+const PACKING = [
+{g:"证件钱财",items:["身份证（乘船、住店、上岛必查）","学生证/老年证（上岛门票半价）","少量现金（岛上个别地方信号差）","旅行保险单截图（含延误/取消条款）"]},
+{g:"防晒防暑",items:["SPF50+防晒霜（多带一支补涂）","晒后修复芦荟胶","墨镜、防晒衣、宽檐帽","藿香正气水/防暑药","挂脖小风扇（排队坐船救星）"]},
+{g:"海岛玩水",items:["泳衣","手机防水袋","速干毛巾","浮潜面罩+呼吸管（可选，岛上租的卫生一般）","溯溪鞋/防滑涉水鞋（火山岩青苔滑）"]},
+{g:"药品",items:["晕船药/防晕贴（提前半小时吃）","肠胃药（海鲜生冷易闹肚子）","感冒药、退烧药","创可贴、碘伏棉签","驱蚊水+止痒膏","个人常用药"]},
+{g:"其他实用",items:["充电宝（≤2万毫安，随身！）","雨伞/轻便雨衣","湿巾、纸巾","密封袋若干（装湿泳衣、防进沙）","折叠水杯/保温杯","小背包/沙滩包","换洗衣物多备一套（速干优先）"]}
+];
+
+/* ================= 渲染总览 ================= */
+document.getElementById("ovCard").innerHTML = OVERVIEW.map(o=>`
+  <div class="ov-row ${o.island?"island":""}">
+    <div class="ov-day"><span class="d">Day</span> ${o.d}<div style="font-size:10px;color:#9db4b8;font-weight:400">${o.date}</div></div>
+    <div class="ov-main"><b>${o.plan}</b><span class="hl">${o.hl}</span></div>
+    <span class="ov-bed ${o.island?"island":""}">${o.bed}</span>
+  </div>`).join("");
+
+/* ================= 渲染每日行程 ================= */
+document.getElementById("dayList").innerHTML = DAYS.map((d,i)=>`
+<div class="day ${i===0?"open":""}">
+  <button class="day-head" data-i="${i}">
+    <div class="day-badge"><span class="t">DAY</span><span class="n">${d.badge.slice(1)}</span></div>
+    <div class="info"><h3>${d.title}</h3><p>${d.sub}</p></div>
+    <span class="chev">▼</span>
+  </button>
+  <div class="day-body"><div class="day-inner">
+    ${d.blocks.map(b=>`
+      <div class="block"><h4>${b.h}</h4><ul>
+        ${b.items.map(it=>`<li>${it}</li>`).join("")}
+      </ul></div>`).join("")}
+    ${d.warn?`<div class="warn">${d.warn}</div>`:""}
+    ${d.tip?`<div class="tip">${d.tip}</div>`:""}
+  </div></div>
+</div>`).join("");
+
+document.querySelectorAll(".day-head").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    btn.closest(".day").classList.toggle("open");
+  });
+});
+
+/* ================= 清单（localStorage 持久化） ================= */
+const KEY = "bh-packing-v1";
+let state = {};
+try{ state = JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ state={}; }
+
+const packEl = document.getElementById("packList");
+let html = "";
+PACKING.forEach((grp,gi)=>{
+  html += `<div class="cl-group"><h4>${grp.g}</h4>`;
+  grp.items.forEach((it,ii)=>{
+    const id = `p${gi}-${ii}`;
+    const done = state[id] ? "done" : "";
+    html += `<label class="cl-item ${done}" data-id="${id}">
+      <input type="checkbox" ${state[id]?"checked":""}>
+      <span class="cl-box"><svg viewBox="0 0 24 24"><polyline points="4 13 10 19 20 6"/></svg></span>
+      <span class="cl-text">${it}</span>
+    </label>`;
+  });
+  html += `</div>`;
+});
+packEl.innerHTML = html;
+
+function refresh(){
+  const items = document.querySelectorAll(".cl-item");
+  let done = 0;
+  items.forEach(el=>{ if(el.classList.contains("done")) done++; });
+  document.getElementById("pText").textContent = `${done} / ${items.length}`;
+  document.getElementById("pBar").style.width = items.length ? (done/items.length*100)+"%" : "0%";
+}
+
+packEl.addEventListener("change",e=>{
+  const label = e.target.closest(".cl-item");
+  if(!label) return;
+  const id = label.dataset.id;
+  if(e.target.checked){ state[id]=1; label.classList.add("done"); }
+  else{ delete state[id]; label.classList.remove("done"); }
+  localStorage.setItem(KEY, JSON.stringify(state));
+  refresh();
+});
+
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  if(!confirm("确定清空所有勾选吗？")) return;
+  state = {};
+  localStorage.removeItem(KEY);
+  document.querySelectorAll(".cl-item").forEach(el=>{
+    el.classList.remove("done");
+    el.querySelector("input").checked = false;
+  });
+  refresh();
+});
+refresh();
+
+/* ================= 滚动显现 ================= */
+const io = new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
+},{threshold:.08});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
